@@ -36,6 +36,9 @@ lld-design-patterns/
 |---------|-------------|----------|
 | [Factory](creational/FactoryPattern.java) | Hides object creation behind a factory method | Client uses `createVehicle("car")` instead of `new Car()` |
 | [Abstract Factory](creational/AbstractFactoryPattern.java) | Creates families of related objects | Ensures compatible pairs (Car + CarEngine, Bike + BikeEngine) |
+| [Builder](creational/BuilderPattern.java) | Constructs complex objects step by step | Fluent API for object construction with many optional params |
+| [Prototype](creational/PrototypePattern.java) | Creates objects by cloning an existing instance | Copy instead of creating from scratch |
+| [Singleton](creational/SingletonPattern.java) | Ensures a class has only one instance globally | Single shared instance with controlled access |
 
 ### Structural Patterns
 *How we compose and organize objects — building flexible architectures*
@@ -116,8 +119,11 @@ Or use your IDE: open the file and run the `main` method.
 
 ```
 creational/
+├── AbstractFactoryPattern.java
+├── BuilderPattern.java
 ├── FactoryPattern.java
-└── AbstractFactoryPattern.java
+├── PrototypePattern.java
+└── SingletonPattern.java
 
 structural/
 ├── AdapterPattern.java
