@@ -60,6 +60,7 @@ lld-design-patterns/
 |---------|-------------|----------|
 | [Chain of Responsibility](behavioral/ChainOfResponsibilityPattern.java) | Passes request along a chain of handlers | Each handler can process or forward |
 | [Command](behavioral/CommandPattern.java) | Encapsulates actions as objects | Undo, queues, logging, decoupling |
+| [Interpreter](behavioral/InterpreterPattern.java) | Defines a grammar and interpreter for expressions | Used to evaluate expressions by representing each rule as an object. |
 | [Observer](behavioral/ObserverPattern.java) | One-to-many dependency for updates | Subject notifies subscribers on change |
 | [State](behavioral/StatePattern.java) | Behavior changes with internal state | Object delegates to state-specific handlers |
 | [Strategy](behavioral/StrategyPattern.java) | Interchangeable algorithms | Same task, different ways (e.g. Car vs Walking route) |
@@ -137,6 +138,7 @@ structural/
 behavioral/
 ├── ChainOfResponsibilityPattern.java
 ├── CommandPattern.java
+├── InterpreterPattern.java
 ├── ObserverPattern.java
 ├── StatePattern.java
 ├── StrategyPattern.java
