@@ -1,3 +1,6 @@
+// Flyweight Pattern is used to reduce memory usage by sharing common data between multiple objects 
+// instead of creating duplicate objects.
+
 import java.util.*;
 
 // =============================

@@ -1,3 +1,13 @@
+//Composite pattern composes objects into tree structures to represent part-whole hierarchies.
+
+//Composite Pattern allows you to treat individual objects and groups of objects in the same way.
+
+//Example:
+//File System
+//Folder contains files and other folders
+//File is a leaf node
+//Folder is a composite node
+
 import java.util.ArrayList;
 import java.util.List;
 

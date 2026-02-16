@@ -1,3 +1,7 @@
+// Proxy Pattern provides a substitute or placeholder for another object to control access to it.
+// It is used to create a proxy class that can control access to the real object.
+
+
 // =======================
 // 1. Subject Interface
 // =======================
