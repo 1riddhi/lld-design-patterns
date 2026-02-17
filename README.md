@@ -63,6 +63,7 @@ lld-design-patterns/
 | [Interpreter](behavioral/InterpreterPattern.java) | Defines a grammar and interpreter for expressions | Used to evaluate expressions by representing each rule as an object. |
 | [Iterator](behavioral/IteratorPattern.java) | Provides a way to access elements sequentially without exposing underlying structure | Traverse a collection via a standard iterator interface |
 | [Mediator](behavioral/MediatorPattern.java) | Restricts direct communications between the objects and forces them to collaborate only via a mediator object | Objects communicate through a mediator instead of directly |
+| [Memento](behavioral/MementoPattern.java) | Captures and restores an object's state without exposing its implementation details | Save and restore snapshots of an object's state |
 | [Observer](behavioral/ObserverPattern.java) | One-to-many dependency for updates | Subject notifies subscribers on change |
 | [State](behavioral/StatePattern.java) | Behavior changes with internal state | Object delegates to state-specific handlers |
 | [Strategy](behavioral/StrategyPattern.java) | Interchangeable algorithms | Same task, different ways (e.g. Car vs Walking route) |
@@ -144,6 +145,7 @@ behavioral/
 ├── InterpreterPattern.java
 ├── IteratorPattern.java
 ├── MediatorPattern.java
+├── MementoPattern.java
 ├── ObserverPattern.java
 ├── StatePattern.java
 ├── StrategyPattern.java
