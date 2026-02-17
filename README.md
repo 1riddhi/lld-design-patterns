@@ -66,6 +66,7 @@ lld-design-patterns/
 | [State](behavioral/StatePattern.java) | Behavior changes with internal state | Object delegates to state-specific handlers |
 | [Strategy](behavioral/StrategyPattern.java) | Interchangeable algorithms | Same task, different ways (e.g. Car vs Walking route) |
 | [Template Method](behavioral/TemplateMethodPattern.java) | Skeleton algorithm with customizable steps | Subclasses fill in the blanks |
+| [Visitor](behavioral/VisitorPattern.java) | allows you to add new operations to a group of related classes without modifying their structures | Add new operations without changing related classes |
 
 ---
 
@@ -144,7 +145,8 @@ behavioral/
 ├── ObserverPattern.java
 ├── StatePattern.java
 ├── StrategyPattern.java
-└── TemplateMethodPattern.java
+├── TemplateMethodPattern.java
+└── VisitorPattern.java
 
 solid/
 └── notes.txt
