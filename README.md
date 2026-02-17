@@ -62,11 +62,12 @@ lld-design-patterns/
 | [Command](behavioral/CommandPattern.java) | Encapsulates actions as objects | Undo, queues, logging, decoupling |
 | [Interpreter](behavioral/InterpreterPattern.java) | Defines a grammar and interpreter for expressions | Used to evaluate expressions by representing each rule as an object. |
 | [Iterator](behavioral/IteratorPattern.java) | Provides a way to access elements sequentially without exposing underlying structure | Traverse a collection via a standard iterator interface |
+| [Mediator](behavioral/MediatorPattern.java) | Restricts direct communications between the objects and forces them to collaborate only via a mediator object | Objects communicate through a mediator instead of directly |
 | [Observer](behavioral/ObserverPattern.java) | One-to-many dependency for updates | Subject notifies subscribers on change |
 | [State](behavioral/StatePattern.java) | Behavior changes with internal state | Object delegates to state-specific handlers |
 | [Strategy](behavioral/StrategyPattern.java) | Interchangeable algorithms | Same task, different ways (e.g. Car vs Walking route) |
 | [Template Method](behavioral/TemplateMethodPattern.java) | Skeleton algorithm with customizable steps | Subclasses fill in the blanks |
-| [Visitor](behavioral/VisitorPattern.java) | allows you to add new operations to a group of related classes without modifying their structures | Add new operations without changing related classes |
+| [Visitor](behavioral/VisitorPattern.java) | Allows you to add new operations to a group of related classes without modifying their structures | Add new operations without changing related classes |
 
 ---
 
@@ -142,6 +143,7 @@ behavioral/
 ├── CommandPattern.java
 ├── InterpreterPattern.java
 ├── IteratorPattern.java
+├── MediatorPattern.java
 ├── ObserverPattern.java
 ├── StatePattern.java
 ├── StrategyPattern.java
