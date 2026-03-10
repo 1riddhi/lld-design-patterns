@@ -9,8 +9,8 @@
 // A family means a group of compatible objects that are meant to work together, 
 // like Car + CarEngine or Bike + BikeEngine.
 
-//Concrete classes are hidden inside the factory,
-// and the client works only with interfaces.
+// Concrete classes are hidden inside the factory,
+// and the client works only with interfaces(Vehicle and Engine).
 
 // ==============================
 // Product Interfaces
