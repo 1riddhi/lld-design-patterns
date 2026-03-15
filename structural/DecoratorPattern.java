@@ -58,6 +58,12 @@ abstract class PizzaDecorator implements Pizza {
     public String getDescription() {
         return pizza.getDescription();
     }
+
+    // Method to unwrap inner object
+    public Pizza unwrap() {
+        return pizza;
+    }
+
 }
 
 // ======================
@@ -117,7 +123,7 @@ class PaneerDecorator extends PizzaDecorator {
 // ======================
 // 5. Client Code
 // ======================
-public class Main {
+public class DecoratorPattern {
 
     public static void main(String[] args) {
 
@@ -135,5 +141,15 @@ public class Main {
 
         System.out.println("Description: " + pizza.getDescription());
         System.out.println("Total Cost: ₹" + pizza.getCost());
+
+         //Unwrap last decorator (Paneer)
+        if (pizza instanceof PizzaDecorator) {
+            pizza = ((PizzaDecorator) pizza).unwrap();
+        }
+
+        System.out.println("\nAfter unwrap:");
+        System.out.println("Description: " + pizza.getDescription());
+        System.out.println("Total Cost: ₹" + pizza.getCost());
+
     }
 }
