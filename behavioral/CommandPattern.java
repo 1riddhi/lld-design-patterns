@@ -2,6 +2,10 @@
 //so that it can be executed, queued, logged, or undone later.
 
 
+//invoker -> command -> receiver
+//invokder has command
+//command has receiver
+
 import java.util.Stack;
 
 // 1️⃣ Command Interface
