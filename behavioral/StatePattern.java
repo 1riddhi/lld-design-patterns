@@ -1,90 +1,70 @@
-//State pattern allows an object to change its behavior when its internal state changes.
-// The object will appear to change its class.
+// Instead of using if-else for state handling, I created separate state classes implementing a common interface.
+// The context delegates behavior to the current state and allows dynamic state transitions.”
+// 
+// A behavioral design pattern that allows an object(context) to change its behavior when its internal state changes, by delegating state-specific behavior to separate state classes.
+// 
+// State Design Pattern - Vending Machine Example
 
-// Behavior Interface (instead of State)
-interface SignalBehavior {
-    void next(TrafficLight light);
-    void display();
+// 1. State interface (defines actions)
+interface State {
+    void insertCoin(VendingMachine machine);
+    void selectItem(VendingMachine machine);
 }
 
+// 2. Concrete State: No Coin
+class NoCoinState implements State {
 
-// ---------------- RED ----------------
-class RedSignal implements SignalBehavior {
-
-    public void next(TrafficLight light) {
-        light.setBehavior(new GreenSignal());
+    public void insertCoin(VendingMachine machine) {
+        System.out.println("Coin inserted");
+        machine.setState(new HasCoinState()); // state transition
     }
 
-    public void display() {
-        System.out.println("RED - Stop");
-    }
-}
-
-
-// ---------------- GREEN ----------------
-class GreenSignal implements SignalBehavior {
-
-    public void next(TrafficLight light) {
-        light.setBehavior(new YellowSignal());
-    }
-
-    public void display() {
-        System.out.println("GREEN - Go");
+    public void selectItem(VendingMachine machine) {
+        System.out.println("Insert coin first");
     }
 }
 
+// 3. Concrete State: Has Coin
+class HasCoinState implements State {
 
-// ---------------- YELLOW ----------------
-class YellowSignal implements SignalBehavior {
-
-    public void next(TrafficLight light) {
-        light.setBehavior(new RedSignal());
+    public void insertCoin(VendingMachine machine) {
+        System.out.println("Coin already inserted");
     }
 
-    public void display() {
-        System.out.println("YELLOW - Wait");
-    }
-}
-
-
-// ---------------- CONTEXT ----------------
-class TrafficLight {
-
-    private SignalBehavior behavior;
-
-    public TrafficLight() {
-        behavior = new RedSignal(); // initial behavior
-    }
-
-    public void setBehavior(SignalBehavior behavior) {
-        this.behavior = behavior;
-    }
-
-    public void next() {
-        behavior.next(this);
-    }
-
-    public void show() {
-        behavior.display();
+    public void selectItem(VendingMachine machine) {
+        System.out.println("Item dispensed");
+        machine.setState(new NoCoinState()); // state transition back
     }
 }
 
+// 4. Context class (delegates behavior to current state)
+class VendingMachine {
+    private State currentState;
 
-// ---------------- MAIN ----------------
+    public VendingMachine() {
+        currentState = new NoCoinState(); // initial state
+    }
+
+    public void setState(State state) {
+        this.currentState = state;
+    }
+
+    public void insertCoin() {
+        currentState.insertCoin(this); // delegate to state
+    }
+
+    public void selectItem() {
+        currentState.selectItem(this); // delegate to state
+    }
+}
+
+// 5. Driver
 public class StatePattern {
     public static void main(String[] args) {
+        VendingMachine vm = new VendingMachine();
 
-        TrafficLight light = new TrafficLight();
-
-        light.show();
-        light.next();
-
-        light.show();
-        light.next();
-
-        light.show();
-        light.next();
-
-        light.show();
+        vm.selectItem();   // Insert coin first
+        vm.insertCoin();   // Coin inserted
+        vm.selectItem();   // Item dispensed
     }
 }

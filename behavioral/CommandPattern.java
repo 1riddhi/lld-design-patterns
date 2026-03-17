@@ -1,10 +1,13 @@
-//Command pattern encapsulates a request as an object
-//so that it can be executed, queued, logged, or undone later.
+// Command pattern encapsulates a request(command) as an object
+//  so that it can be executed, queued, logged, or undone later.
 
 
 //invoker -> command -> receiver
 //invokder has command
 //command has receiver
+
+//Command pattern converts operations into objects
+//so that operations can be stored, undone, or executed later.
 
 import java.util.Stack;
 
@@ -83,7 +86,7 @@ class Editor {
 }
 
 // 5️⃣ Client
-public class CommandPatternDemo {
+public class CommandPattern {
 
     public static void main(String[] args) {
 
