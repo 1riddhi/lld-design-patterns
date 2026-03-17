@@ -2,6 +2,10 @@
 //  in a base class and allows subclasses to override specific steps without changing the algorithm’s flow.
 
 
+// when you want all classes to follow the specific steps 
+// but also need to provide the flexibility that each class can have
+// their own logic in that specific steps.
+
 
 // ABSTRACT CLASS (Template)
 abstract class Beverage {
