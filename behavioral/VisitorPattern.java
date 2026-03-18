@@ -2,6 +2,10 @@
 
 // Visitor is best used when the object structure is fixed, but new operations need to be added frequently.
 
+// Double Dispatch means the method that gets executed depends on two things:
+// Type of the object calling the method
+// Type of the argument passed
+
 // Object structure is stable (Rooms).
 // Operations keep changing (Price, Maintenance, Tax, etc.).
 // Instead of adding methods inside Room classes, we create Visitors.

@@ -47,6 +47,7 @@ class GoogleMap {
     }
 
     public void buildRoute(String from, String to) {
+        //estimated time returned by the strategy
         routeStrategy.buildRoute(from, to);
     }
 }
