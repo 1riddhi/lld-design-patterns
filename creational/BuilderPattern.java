@@ -13,18 +13,13 @@
 //  Use the Builder pattern when you want your code to be
 //  able to create different representations of some product (
 
+// ==========================
+// Product
+// ==========================
 class Vehicle {
-
-    private String engine;
-    private int seats;
-    private boolean gps;
-
-    // private constructor
-    private Vehicle(Builder builder) {
-        this.engine = builder.engine;
-        this.seats = builder.seats;
-        this.gps = builder.gps;
-    }
+    String engine;
+    int seats;
+    boolean gps;
 
     public void show() {
         System.out.println(
@@ -33,35 +28,65 @@ class Vehicle {
             ", GPS: " + gps
         );
     }
+}
 
 
-    // ==========================
-    // Builder
-    // ==========================
-    public static class Builder {
+// ==========================
+// Builder Interface
+// ==========================
+interface VehicleBuilder {
+    void setEngine(String engine);
+    void setSeats(int seats);
+    void setGPS(boolean gps);
+    Vehicle getVehicle();
+}
 
-        private String engine;
-        private int seats;
-        private boolean gps;
 
-        public Builder setEngine(String engine) {
-            this.engine = engine;
-            return this; // chaining
-        }
+// ==========================
+// Concrete Builder
+// ==========================
+class CarBuilder implements VehicleBuilder {
 
-        public Builder setSeats(int seats) {
-            this.seats = seats;
-            return this;
-        }
+    private Vehicle vehicle;
 
-        public Builder setGPS(boolean gps) {
-            this.gps = gps;
-            return this;
-        }
+    public CarBuilder() {
+        this.vehicle = new Vehicle();
+    }
 
-        public Vehicle build() {
-            return new Vehicle(this);
-        }
+    public void setEngine(String engine) {
+        vehicle.engine = engine;
+    }
+
+    public void setSeats(int seats) {
+        vehicle.seats = seats;
+    }
+
+    public void setGPS(boolean gps) {
+        vehicle.gps = gps;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+}
+
+
+// ==========================
+// Director
+// ==========================
+class Director {
+
+    // Predefined configuration
+    public void buildSportsCar(VehicleBuilder builder) {
+        builder.setEngine("V8");
+        builder.setSeats(2);
+        builder.setGPS(true);
+    }
+
+    public void buildFamilyCar(VehicleBuilder builder) {
+        builder.setEngine("V6");
+        builder.setSeats(5);
+        builder.setGPS(true);
     }
 }
 
@@ -69,17 +94,22 @@ class Vehicle {
 // ==========================
 // Client
 // ==========================
-
 public class BuilderPattern {
 
     public static void main(String[] args) {
 
-        Vehicle car = new Vehicle.Builder()
-                .setEngine("V8")
-                .setSeats(4)
-                .setGPS(true)
-                .build();
+        Director director = new Director();
 
-        car.show();
+        // Build Sports Car
+        VehicleBuilder builder1 = new CarBuilder();
+        director.buildSportsCar(builder1);
+        Vehicle sportsCar = builder1.getVehicle();
+        sportsCar.show();
+
+        // Build Family Car
+        VehicleBuilder builder2 = new CarBuilder();
+        director.buildFamilyCar(builder2);
+        Vehicle familyCar = builder2.getVehicle();
+        familyCar.show();
     }
 }

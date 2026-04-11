@@ -6,6 +6,8 @@
     Vehicle cloning
 */
 
+// We use the Prototype Design Pattern when object creation is expensive (e.g., involves DB/API calls, heavy computation, or complex setup). Instead of creating new objects repeatedly, we create one fully initialized object and then clone it. Cloning is faster because it avoids re-running the expensive initialization logic and only copies the existing state.
+
 
 // =======================
 // Prototype interface
@@ -55,7 +57,7 @@ class Vehicle implements Prototype {
 // Client
 // =======================
 
-public class PrototypeDemo {
+public class PrototypePattern {
 
     public static void main(String[] args) {
 
