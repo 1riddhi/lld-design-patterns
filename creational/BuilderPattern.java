@@ -1,13 +1,21 @@
-/*
- * Builder Pattern
- *
- * Builds a complex object step by step instead of one huge constructor.
- * Director: fixed recipes that call the same builder steps (client does not pick each part).
- */
+//Builder pattern is used to construct complex objects step-by-step,
+// especially when there are many optional parameters,
+//improving readability and flexibility.
 
-// ==============================
+ /*
+-    Builder Pattern WITHOUT Director
+-    Vehicle Example (Simple + Realistic)
+-*/
+
+//builder builds vehicle object step by step -> composition relationship
+//builder is a static nested class
+
+//  Use the Builder pattern when you want your code to be
+//  able to create different representations of some product (
+
+// ==========================
 // Product
-// ==============================
+// ==========================
 class Computer {
 
     private final String cpu;
