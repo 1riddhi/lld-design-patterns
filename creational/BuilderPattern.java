@@ -1,115 +1,126 @@
-//Builder pattern is used to construct complex objects step-by-step,
-// especially when there are many optional parameters,
-//improving readability and flexibility.
-
 /*
-    Builder Pattern WITHOUT Director
-    Vehicle Example (Simple + Realistic)
-*/
+ * Builder Pattern
+ *
+ * Builds a complex object step by step instead of one huge constructor.
+ * Director: fixed recipes that call the same builder steps (client does not pick each part).
+ */
 
-//builder builds vehicle object step by step -> composition relationship
-//builder is a static nested class
-
-//  Use the Builder pattern when you want your code to be
-//  able to create different representations of some product (
-
-// ==========================
+// ==============================
 // Product
-// ==========================
-class Vehicle {
-    String engine;
-    int seats;
-    boolean gps;
+// ==============================
+class Computer {
 
-    public void show() {
-        System.out.println(
-            "Engine: " + engine +
-            ", Seats: " + seats +
-            ", GPS: " + gps
-        );
+    private final String cpu;
+    private final int ramGb;
+    private final String storage;
+
+    Computer(String cpu, int ramGb, String storage) {
+        this.cpu = cpu;
+        this.ramGb = ramGb;
+        this.storage = storage;
+    }
+
+    @Override
+    public String toString() {
+        return "Computer{cpu='" + cpu + "', ramGb=" + ramGb + ", storage='" + storage + "'}";
     }
 }
 
+// ==============================
+// Builder (interface + concrete)
+// ==============================
+interface ComputerBuilder {
 
-// ==========================
-// Builder Interface
-// ==========================
-interface VehicleBuilder {
-    void setEngine(String engine);
-    void setSeats(int seats);
-    void setGPS(boolean gps);
-    Vehicle getVehicle();
+    ComputerBuilder cpu(String cpu);
+
+    ComputerBuilder ramGb(int ramGb);
+
+    ComputerBuilder storage(String storage);
+
+    Computer build();
 }
 
+class StandardComputerBuilder implements ComputerBuilder {
 
-// ==========================
-// Concrete Builder
-// ==========================
-class CarBuilder implements VehicleBuilder {
+    private String cpu;
+    private int ramGb;
+    private String storage;
 
-    private Vehicle vehicle;
-
-    public CarBuilder() {
-        this.vehicle = new Vehicle();
+    @Override
+    public ComputerBuilder cpu(String cpu) {
+        this.cpu = cpu;
+        return this;
     }
 
-    public void setEngine(String engine) {
-        vehicle.engine = engine;
+    @Override
+    public ComputerBuilder ramGb(int ramGb) {
+        this.ramGb = ramGb;
+        return this;
     }
 
-    public void setSeats(int seats) {
-        vehicle.seats = seats;
+    @Override
+    public ComputerBuilder storage(String storage) {
+        this.storage = storage;
+        return this;
     }
 
-    public void setGPS(boolean gps) {
-        vehicle.gps = gps;
-    }
-
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-}
-
-
-// ==========================
-// Director
-// ==========================
-class Director {
-
-    // Predefined configuration
-    public void buildSportsCar(VehicleBuilder builder) {
-        builder.setEngine("V8");
-        builder.setSeats(2);
-        builder.setGPS(true);
-    }
-
-    public void buildFamilyCar(VehicleBuilder builder) {
-        builder.setEngine("V6");
-        builder.setSeats(5);
-        builder.setGPS(true);
+    @Override
+    public Computer build() {
+        return new Computer(cpu, ramGb, storage);
     }
 }
 
+// ==============================
+// Director — knows preset configurations; uses only ComputerBuilder
+// ==============================
+class ComputerDirector {
 
-// ==========================
+    private ComputerBuilder builder;
+
+    ComputerDirector(ComputerBuilder builder) {
+        this.builder = builder;
+    }
+
+    void setBuilder(ComputerBuilder builder) {
+        this.builder = builder;
+    }
+
+    Computer buildOfficePc() {
+        return builder
+                .cpu("Intel i5")
+                .ramGb(16)
+                .storage("512GB SSD")
+                .build();
+    }
+
+    Computer buildGamingPc() {
+        return builder
+                .cpu("AMD Ryzen 9")
+                .ramGb(32)
+                .storage("2TB NVMe")
+                .build();
+    }
+}
+
+// ==============================
 // Client
-// ==========================
+// ==============================
 public class BuilderPattern {
 
     public static void main(String[] args) {
 
-        Director director = new Director();
+        ComputerDirector director = new ComputerDirector(new StandardComputerBuilder());
 
-        // Build Sports Car
-        VehicleBuilder builder1 = new CarBuilder();
-        director.buildSportsCar(builder1);
-        Vehicle sportsCar = builder1.getVehicle();
-        sportsCar.show();
+        System.out.println("--- Director: presets ---");
+        System.out.println(director.buildOfficePc());
+        System.out.println(director.buildGamingPc());
 
-        // Build Family Car
-        VehicleBuilder builder2 = new CarBuilder();
-        director.buildFamilyCar(builder2);
-        Vehicle familyCar = builder2.getVehicle();
-        familyCar.show();
+        System.out.println("\n--- Client: custom build (no director) ---");
+        Computer workstation = new StandardComputerBuilder()
+                .cpu("Apple M3 Pro")
+                .ramGb(36)
+                .storage("1TB SSD")
+                .build();
+        System.out.println(workstation);
     }
 }
