@@ -1,115 +1,190 @@
-//Builder pattern is used to construct complex objects step-by-step,
-// especially when there are many optional parameters,
-//improving readability and flexibility.
-
 /*
-    Builder Pattern WITHOUT Director
-    Vehicle Example (Simple + Realistic)
-*/
+ * BUILDER PATTERN
+ *
+ * Separates the construction of a complex object from its representation so that
+ * the same construction process can create different representations.
+ *
+ * Components (GoF):
+ *   Product — the complex object being assembled (often immutable when built)
+ *   Builder    — abstract interface for creating parts
+ *   ConcreteBuilder — implements steps; tracks state; produces Product via build()
+ *   Director   — defines recipes using only Builder steps (optional but idiomatic)
+ *
+ * Why use it:
+ *   - Avoids telescoping constructors (many optional parameters)
+ *   - Step-by-step construction with readable, fluent calls
+ *   - Same construction algorithm, different builders → different products
+ *
+ * Related: Abstract Factory builds families; Builder focuses on assembling one
+ * complex object step by step.
+ */
 
-//builder builds vehicle object step by step -> composition relationship
-//builder is a static nested class
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-//  Use the Builder pattern when you want your code to be
-//  able to create different representations of some product (
+// ==============================
+// Product (immutable result)
+// ==============================
+final class Pizza {
 
-// ==========================
-// Product
-// ==========================
-class Vehicle {
-    String engine;
-    int seats;
-    boolean gps;
+    private final String dough;
+    private final String sauce;
+    private final List<String> toppings;
 
-    public void show() {
-        System.out.println(
-            "Engine: " + engine +
-            ", Seats: " + seats +
-            ", GPS: " + gps
-        );
+    Pizza(String dough, String sauce, List<String> toppings) {
+        if (dough == null || dough.isBlank()) {
+            throw new IllegalStateException("Dough is required");
+        }
+        this.dough = dough;
+        this.sauce = sauce != null ? sauce : "none";
+        this.toppings = Collections.unmodifiableList(new ArrayList<>(toppings));
+    }
+
+    public String getDough() {
+        return dough;
+    }
+
+    public String getSauce() {
+        return sauce;
+    }
+
+    public List<String> getToppings() {
+        return toppings;
+    }
+
+    @Override
+    public String toString() {
+        return "Pizza{dough='" + dough + "', sauce='" + sauce + "', toppings=" + toppings + "}";
     }
 }
 
+// ==============================
+// Builder — abstraction for construction steps
+// ==============================
+interface PizzaBuilder {
 
-// ==========================
-// Builder Interface
-// ==========================
-interface VehicleBuilder {
-    void setEngine(String engine);
-    void setSeats(int seats);
-    void setGPS(boolean gps);
-    Vehicle getVehicle();
+    PizzaBuilder reset();
+
+    PizzaBuilder dough(String dough);
+
+    PizzaBuilder sauce(String sauce);
+
+    PizzaBuilder addTopping(String topping);
+
+    Pizza build();
 }
 
+// ==============================
+// ConcreteBuilder — builds Pizza; fluent API
+// ==============================
+class GourmetPizzaBuilder implements PizzaBuilder {
 
-// ==========================
-// Concrete Builder
-// ==========================
-class CarBuilder implements VehicleBuilder {
+    private String dough;
+    private String sauce;
+    private final List<String> toppings = new ArrayList<>();
 
-    private Vehicle vehicle;
-
-    public CarBuilder() {
-        this.vehicle = new Vehicle();
+    @Override
+    public PizzaBuilder reset() {
+        dough = null;
+        sauce = null;
+        toppings.clear();
+        return this;
     }
 
-    public void setEngine(String engine) {
-        vehicle.engine = engine;
+    @Override
+    public PizzaBuilder dough(String dough) {
+        this.dough = dough;
+        return this;
     }
 
-    public void setSeats(int seats) {
-        vehicle.seats = seats;
+    @Override
+    public PizzaBuilder sauce(String sauce) {
+        this.sauce = sauce;
+        return this;
     }
 
-    public void setGPS(boolean gps) {
-        vehicle.gps = gps;
+    @Override
+    public PizzaBuilder addTopping(String topping) {
+        if (topping != null && !topping.isBlank()) {
+            toppings.add(topping);
+        }
+        return this;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-}
-
-
-// ==========================
-// Director
-// ==========================
-class Director {
-
-    // Predefined configuration
-    public void buildSportsCar(VehicleBuilder builder) {
-        builder.setEngine("V8");
-        builder.setSeats(2);
-        builder.setGPS(true);
-    }
-
-    public void buildFamilyCar(VehicleBuilder builder) {
-        builder.setEngine("V6");
-        builder.setSeats(5);
-        builder.setGPS(true);
+    @Override
+    public Pizza build() {
+        Pizza pizza = new Pizza(dough, sauce, toppings);
+        reset();
+        return pizza;
     }
 }
 
+// ==============================
+// Director — orchestrates construction without knowing concrete product details
+// ==============================
+class PizzaDirector {
 
-// ==========================
+    private PizzaBuilder builder;
+
+    PizzaDirector(PizzaBuilder builder) {
+        this.builder = builder;
+    }
+
+    void setBuilder(PizzaBuilder builder) {
+        this.builder = builder;
+    }
+
+    /** Preset: same builder steps, fixed recipe */
+    Pizza buildMargherita() {
+        return builder
+                .reset()
+                .dough("thin Italian")
+                .sauce("tomato basil")
+                .addTopping("mozzarella")
+                .addTopping("fresh basil")
+                .build();
+    }
+
+    /** Another preset using the same construction process */
+    Pizza buildPepperoniFeast() {
+        return builder
+                .reset()
+                .dough("hand-tossed")
+                .sauce("garlic tomato")
+                .addTopping("mozzarella")
+                .addTopping("pepperoni")
+                .addTopping("parmesan")
+                .build();
+    }
+}
+
+// ==============================
 // Client
-// ==========================
+// ==============================
 public class BuilderPattern {
 
     public static void main(String[] args) {
 
-        Director director = new Director();
+        GourmetPizzaBuilder builder = new GourmetPizzaBuilder();
+        PizzaDirector director = new PizzaDirector(builder);
 
-        // Build Sports Car
-        VehicleBuilder builder1 = new CarBuilder();
-        director.buildSportsCar(builder1);
-        Vehicle sportsCar = builder1.getVehicle();
-        sportsCar.show();
+        System.out.println("--- Director: preset recipes ---");
+        System.out.println(director.buildMargherita());
+        System.out.println(director.buildPepperoniFeast());
 
-        // Build Family Car
-        VehicleBuilder builder2 = new CarBuilder();
-        director.buildFamilyCar(builder2);
-        Vehicle familyCar = builder2.getVehicle();
-        familyCar.show();
+        System.out.println("\n--- Client: custom pizza via builder only (no director) ---");
+        Pizza custom = new GourmetPizzaBuilder()
+                .dough("deep dish")
+                .sauce("creamy white")
+                .addTopping("spinach")
+                .addTopping("ricotta")
+                .addTopping("mushrooms")
+                .build();
+        System.out.println(custom);
+
+        System.out.println("\n--- Same director, new concrete builder (swap implementation) ---");
+        PizzaDirector anotherDirector = new PizzaDirector(new GourmetPizzaBuilder());
+        System.out.println(anotherDirector.buildMargherita());
     }
 }
