@@ -1,160 +1,103 @@
 /*
- * BUILDER PATTERN
+ * Builder Pattern
  *
- * Separates the construction of a complex object from its representation so that
- * the same construction process can create different representations.
- *
- * Components (GoF):
- *   Product — the complex object being assembled (often immutable when built)
- *   Builder    — abstract interface for creating parts
- *   ConcreteBuilder — implements steps; tracks state; produces Product via build()
- *   Director   — defines recipes using only Builder steps (optional but idiomatic)
- *
- * Why use it:
- *   - Avoids telescoping constructors (many optional parameters)
- *   - Step-by-step construction with readable, fluent calls
- *   - Same construction algorithm, different builders → different products
- *
- * Related: Abstract Factory builds families; Builder focuses on assembling one
- * complex object step by step.
+ * Builds a complex object step by step instead of one huge constructor.
+ * Director: fixed recipes that call the same builder steps (client does not pick each part).
  */
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 // ==============================
-// Product (immutable result)
+// Product
 // ==============================
-final class Pizza {
+class Computer {
 
-    private final String dough;
-    private final String sauce;
-    private final List<String> toppings;
+    private final String cpu;
+    private final int ramGb;
+    private final String storage;
 
-    Pizza(String dough, String sauce, List<String> toppings) {
-        if (dough == null || dough.isBlank()) {
-            throw new IllegalStateException("Dough is required");
-        }
-        this.dough = dough;
-        this.sauce = sauce != null ? sauce : "none";
-        this.toppings = Collections.unmodifiableList(new ArrayList<>(toppings));
-    }
-
-    public String getDough() {
-        return dough;
-    }
-
-    public String getSauce() {
-        return sauce;
-    }
-
-    public List<String> getToppings() {
-        return toppings;
+    Computer(String cpu, int ramGb, String storage) {
+        this.cpu = cpu;
+        this.ramGb = ramGb;
+        this.storage = storage;
     }
 
     @Override
     public String toString() {
-        return "Pizza{dough='" + dough + "', sauce='" + sauce + "', toppings=" + toppings + "}";
+        return "Computer{cpu='" + cpu + "', ramGb=" + ramGb + ", storage='" + storage + "'}";
     }
 }
 
 // ==============================
-// Builder — abstraction for construction steps
+// Builder (interface + concrete)
 // ==============================
-interface PizzaBuilder {
+interface ComputerBuilder {
 
-    PizzaBuilder reset();
+    ComputerBuilder cpu(String cpu);
 
-    PizzaBuilder dough(String dough);
+    ComputerBuilder ramGb(int ramGb);
 
-    PizzaBuilder sauce(String sauce);
+    ComputerBuilder storage(String storage);
 
-    PizzaBuilder addTopping(String topping);
-
-    Pizza build();
+    Computer build();
 }
 
-// ==============================
-// ConcreteBuilder — builds Pizza; fluent API
-// ==============================
-class GourmetPizzaBuilder implements PizzaBuilder {
+class StandardComputerBuilder implements ComputerBuilder {
 
-    private String dough;
-    private String sauce;
-    private final List<String> toppings = new ArrayList<>();
+    private String cpu;
+    private int ramGb;
+    private String storage;
 
     @Override
-    public PizzaBuilder reset() {
-        dough = null;
-        sauce = null;
-        toppings.clear();
+    public ComputerBuilder cpu(String cpu) {
+        this.cpu = cpu;
         return this;
     }
 
     @Override
-    public PizzaBuilder dough(String dough) {
-        this.dough = dough;
+    public ComputerBuilder ramGb(int ramGb) {
+        this.ramGb = ramGb;
         return this;
     }
 
     @Override
-    public PizzaBuilder sauce(String sauce) {
-        this.sauce = sauce;
+    public ComputerBuilder storage(String storage) {
+        this.storage = storage;
         return this;
     }
 
     @Override
-    public PizzaBuilder addTopping(String topping) {
-        if (topping != null && !topping.isBlank()) {
-            toppings.add(topping);
-        }
-        return this;
-    }
-
-    @Override
-    public Pizza build() {
-        Pizza pizza = new Pizza(dough, sauce, toppings);
-        reset();
-        return pizza;
+    public Computer build() {
+        return new Computer(cpu, ramGb, storage);
     }
 }
 
 // ==============================
-// Director — orchestrates construction without knowing concrete product details
+// Director — knows preset configurations; uses only ComputerBuilder
 // ==============================
-class PizzaDirector {
+class ComputerDirector {
 
-    private PizzaBuilder builder;
+    private ComputerBuilder builder;
 
-    PizzaDirector(PizzaBuilder builder) {
+    ComputerDirector(ComputerBuilder builder) {
         this.builder = builder;
     }
 
-    void setBuilder(PizzaBuilder builder) {
+    void setBuilder(ComputerBuilder builder) {
         this.builder = builder;
     }
 
-    /** Preset: same builder steps, fixed recipe */
-    Pizza buildMargherita() {
+    Computer buildOfficePc() {
         return builder
-                .reset()
-                .dough("thin Italian")
-                .sauce("tomato basil")
-                .addTopping("mozzarella")
-                .addTopping("fresh basil")
+                .cpu("Intel i5")
+                .ramGb(16)
+                .storage("512GB SSD")
                 .build();
     }
 
-    /** Another preset using the same construction process */
-    Pizza buildPepperoniFeast() {
+    Computer buildGamingPc() {
         return builder
-                .reset()
-                .dough("hand-tossed")
-                .sauce("garlic tomato")
-                .addTopping("mozzarella")
-                .addTopping("pepperoni")
-                .addTopping("parmesan")
+                .cpu("AMD Ryzen 9")
+                .ramGb(32)
+                .storage("2TB NVMe")
                 .build();
     }
 }
@@ -166,25 +109,18 @@ public class BuilderPattern {
 
     public static void main(String[] args) {
 
-        GourmetPizzaBuilder builder = new GourmetPizzaBuilder();
-        PizzaDirector director = new PizzaDirector(builder);
+        ComputerDirector director = new ComputerDirector(new StandardComputerBuilder());
 
-        System.out.println("--- Director: preset recipes ---");
-        System.out.println(director.buildMargherita());
-        System.out.println(director.buildPepperoniFeast());
+        System.out.println("--- Director: presets ---");
+        System.out.println(director.buildOfficePc());
+        System.out.println(director.buildGamingPc());
 
-        System.out.println("\n--- Client: custom pizza via builder only (no director) ---");
-        Pizza custom = new GourmetPizzaBuilder()
-                .dough("deep dish")
-                .sauce("creamy white")
-                .addTopping("spinach")
-                .addTopping("ricotta")
-                .addTopping("mushrooms")
+        System.out.println("\n--- Client: custom build (no director) ---");
+        Computer workstation = new StandardComputerBuilder()
+                .cpu("Apple M3 Pro")
+                .ramGb(36)
+                .storage("1TB SSD")
                 .build();
-        System.out.println(custom);
-
-        System.out.println("\n--- Same director, new concrete builder (swap implementation) ---");
-        PizzaDirector anotherDirector = new PizzaDirector(new GourmetPizzaBuilder());
-        System.out.println(anotherDirector.buildMargherita());
+        System.out.println(workstation);
     }
 }
