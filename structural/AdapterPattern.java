@@ -18,8 +18,13 @@ Client: Uses the target interface, unaware of the adapter or adaptee details.
 */
 
 
+// What is Adapter Pattern?
+// Adapter Pattern makes incompatible interfaces work together by converting one interface into another expected by the client.
 
+// Why?
+// To integrate existing/legacy/third-party code without modifying it.
 
+// Adapter = translator between two incompatible interfaces.
 // ===============================
 // 1️⃣ TARGET INTERFACE
 // Client expects this

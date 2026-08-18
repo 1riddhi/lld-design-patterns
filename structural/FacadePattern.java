@@ -1,84 +1,86 @@
 //The Facade Design Pattern is a structural pattern that provides a simple,
 //  unified interface to a complex subsystem(group of classed)
 
-interface Hotel {
-    void getMenu();
-}
+// What:
+// Facade provides a simple interface over a complex subsystem.
 
-// ==========================
-// 2️⃣ Concrete Hotels
-// ==========================
-class VegRestaurant implements Hotel {
+// Why:
+// It hides subsystem complexity and reduces the client's dependency on multiple classes.
 
-    @Override
-    public void getMenu() {
-        System.out.println("Veg Menu: Paneer, Dal, Roti, Rice");
-    }
-}
-
-class NonVegRestaurant implements Hotel {
-
-    @Override
-    public void getMenu() {
-        System.out.println("Non-Veg Menu: Chicken, Mutton, Fish");
-    }
-}
-
-class BothRestaurant implements Hotel {
-
-    @Override
-    public void getMenu() {
-        System.out.println("Veg & Non-Veg Menu: Paneer, Chicken, Fish, Dal");
-    }
-}
-
-// ==========================
-// 3️⃣ Facade Interface
-// ==========================
-interface HotelKeeper {
-
-    Hotel getVegMenu();
-    Hotel getNonVegMenu();
-    Hotel getVegNonMenu();
-}
-
-// ==========================
-// 4️⃣ Facade Implementation
-// ==========================
-class HotelKeeperImpl implements HotelKeeper {
-
-    @Override
-    public Hotel getVegMenu() {
-        return new VegRestaurant();
-    }
-
-    @Override
-    public Hotel getNonVegMenu() {
-        return new NonVegRestaurant();
-    }
-
-    @Override
-    public Hotel getVegNonMenu() {
-        return new BothRestaurant();
-    }
-}
-
-// ==========================
-// 5️⃣ Client
-// ==========================
 public class FacadePattern {
 
     public static void main(String[] args) {
 
-        HotelKeeper keeper = new HotelKeeperImpl();
+        OrderFacade orderFacade = new OrderFacade();
 
-        Hotel vegMenu = keeper.getVegMenu();
-        vegMenu.getMenu();
+        orderFacade.createOrder();
+    }
+}
 
-        Hotel nonVegMenu = keeper.getNonVegMenu();
-        nonVegMenu.getMenu();
 
-        Hotel bothMenu = keeper.getVegNonMenu();
-        bothMenu.getMenu();
+// Subsystem 1
+class ProductDAO {
+
+    public Product getProduct(int productId) {
+        System.out.println("Product fetched: " + productId);
+        return new Product();
+    }
+}
+
+
+// Subsystem 2
+class Payment {
+
+    public void makePayment() {
+        System.out.println("Payment successful");
+    }
+}
+
+
+// Subsystem 3
+class Invoice {
+
+    public void generateInvoice() {
+        System.out.println("Invoice generated");
+    }
+}
+
+
+// Subsystem 4
+class SendNotification {
+
+    public void sendNotification() {
+        System.out.println("Notification sent");
+    }
+}
+
+
+// Simple Product class
+class Product {
+}
+
+
+// Facade
+class OrderFacade {
+
+    private final ProductDAO productDao;
+    private final Invoice invoice;
+    private final Payment payment;
+    private final SendNotification notification;
+
+    public OrderFacade() {
+        productDao = new ProductDAO();
+        invoice = new Invoice();
+        payment = new Payment();
+        notification = new SendNotification();
+    }
+
+    public void createOrder() {
+
+        Product product = productDao.getProduct(121);
+        payment.makePayment();
+        invoice.generateInvoice();
+        notification.sendNotification();
+        System.out.println("Order creation successful");
     }
 }
