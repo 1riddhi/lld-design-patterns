@@ -69,6 +69,7 @@ lld-design-patterns/
 | [Strategy](behavioral/StrategyPattern.java) | Interchangeable algorithms | Same task, different ways (e.g. Car vs Walking route) |
 | [Template Method](behavioral/TemplateMethodPattern.java) | Skeleton algorithm with customizable steps | Subclasses fill in the blanks |
 | [Visitor](behavioral/VisitorPattern.java) | Allows you to add new operations to a group of related classes without modifying their structures | Add new operations without changing related classes |
+| [Null Object](behavioral/NullObjectDesignPattern.java) | Provides a default object instead of `null` | Avoids null checks and `NullPointerException` |
 
 ---
 

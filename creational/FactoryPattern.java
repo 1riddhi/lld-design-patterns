@@ -14,6 +14,30 @@ Client should NOT do:
 Instead:
     factory.createVehicle()
 */
+// What:
+// Factory Pattern creates objects through a factory instead of directly using `new`.
+
+// Why:
+// It hides object-creation logic from the client.
+
+// When to use:
+// When the application needs to choose which object to create based on input/configuration.
+
+// Example:
+// PaymentFactory
+//     ├── "UPI"  → UpiPayment
+//     ├── "CARD" → CardPayment
+//     └── "PAYPAL" → PaypalPayment
+
+// Client:
+// Payment payment = PaymentFactory.create("UPI");
+// payment.pay();
+
+// Real-world usage:
+// - Payment → UPI / Card / PayPal
+// - Notification → Email / SMS / Push
+// - File processing → CSV / JSON / XML
+// - Database → MySQL / PostgreSQL / Oracle
 
 
 // ==============================

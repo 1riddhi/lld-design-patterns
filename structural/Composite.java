@@ -67,7 +67,7 @@ class Folder implements FileSystemComponent {
 // =================================
 // 4. Client
 // =================================
-public class CompositePattern{
+public class Composite{
 
     public static void main(String[] args) {
 
